@@ -19,9 +19,14 @@ const app = express();
 // helmet and compression
 require("./prod/prod")(app);
 
+const database =
+  process.env.NODE_ENV === production
+    ? process.env.CLOUD_DATABASE
+    : process.env.LOCAL_DATABASE;
+
 // connecting to db
 mongoose
-  .connect(process.env.LOCAL_DATABASE, {
+  .connect(database, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false,
