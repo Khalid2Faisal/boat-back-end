@@ -20,7 +20,7 @@ const app = express();
 require("./prod/prod")(app);
 
 const database =
-  process.env.NODE_ENV === production
+  process.env.NODE_ENV === "production"
     ? process.env.CLOUD_DATABASE
     : process.env.LOCAL_DATABASE;
 
