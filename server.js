@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config();
+// require("dotenv").config();
 
 // requiring routes
 const blogRoutes = require("./routes/blogs");
