@@ -19,6 +19,10 @@ const app = express();
 // helmet and compression
 require("./prod/prod")(app);
 
+const options = {
+  origin: [process.env.CLIENT_URL, process.env.PRODUCTION_URL],
+};
+
 const database =
   process.env.NODE_ENV === "production"
     ? process.env.CLOUD_DATABASE
@@ -41,12 +45,8 @@ mongoose
 app.use(express.json());
 app.use(morgan("dev"));
 // cors
-if ((process.env.NODE_ENV = "development")) {
-  app.use(cors({ origin: process.env.CLIENT_URL }));
-}
-if ((process.env.NODE_ENV = "production")) {
-  app.use(cors({ origin: process.env.PRODUCTION_URL }));
-}
+
+app.use(cors(options));
 
 // using routes
 app.use("/api", blogRoutes);
