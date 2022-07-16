@@ -44,6 +44,9 @@ app.use(morgan("dev"));
 if ((process.env.NODE_ENV = "development")) {
   app.use(cors({ origin: process.env.CLIENT_URL }));
 }
+if ((process.env.NODE_ENV = "production")) {
+  app.use(cors({ origin: process.env.PRODUCTION_URL }));
+}
 
 // using routes
 app.use("/api", blogRoutes);
