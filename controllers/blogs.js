@@ -59,9 +59,9 @@ const create = (req, res) => {
     let arrayOfTags = tags && tags.split(",");
 
     if (files.photo) {
-      if (files.photo.size > 10000000) {
+      if (files.photo.size > 1000000) {
         return res.status(400).json({
-          error: "Image should be less than 10mb in size",
+          error: "Image should be less than 1mb in size",
         });
       }
       blog.photo.data = fs.readFileSync(files.photo.path);
