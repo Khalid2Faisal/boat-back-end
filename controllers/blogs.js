@@ -163,13 +163,25 @@ const listAllBlogsCategoriesTags = (req, res) => {
               } else {
                 tags = t;
 
-                res.json({ blogs, categories, tags, size: blogs.length });
+                res.json({ blogs, categories, tags, count: blogs.length });
               }
             });
           }
         });
       }
     });
+};
+
+const getBlogSize = (req, res) => {
+  Blog.estimatedDocumentCount({}, (err, count) => {
+    if (err) {
+      return res.status(400).json({
+        error: errorHandler(err),
+      });
+    } else {
+      res.json(count);
+    }
+  });
 };
 
 const listAllFeatured = (req, res) => {
@@ -466,6 +478,7 @@ module.exports = {
   create,
   list,
   listAllBlogsCategoriesTags,
+  getBlogSize,
   listAllFeatured,
   authorOfTheMonth,
   read,

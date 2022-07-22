@@ -4,6 +4,7 @@ const {
   create,
   list,
   listAllBlogsCategoriesTags,
+  getBlogSize,
   listAllFeatured,
   read,
   remove,
@@ -25,6 +26,7 @@ const {
 router.post("/blog", requireSignin, adminMiddleware, create);
 router.get("/blogs", list);
 router.post("/blogs-categories-tags", listAllBlogsCategoriesTags);
+router.get("/blogs/size", getBlogSize);
 router.get("/featured", listAllFeatured);
 router.get("/blog/:slug", read);
 router.delete("/blog/:slug", requireSignin, adminMiddleware, remove);
