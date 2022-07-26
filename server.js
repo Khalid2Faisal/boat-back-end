@@ -3,10 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+// require("dotenv").config();
 
 // requiring routes
 const blogRoutes = require("./routes/blogs");

@@ -130,7 +130,7 @@ const listAllBlogsCategoriesTags = (req, res) => {
   let categories;
   let tags;
 
-  Blog.find({ isFeatured: null })
+  Blog.find({})
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username")

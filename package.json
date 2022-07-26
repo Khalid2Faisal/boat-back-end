@@ -4,8 +4,7 @@
   "description": "dev to dev blog backend",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": "12.16.2"
