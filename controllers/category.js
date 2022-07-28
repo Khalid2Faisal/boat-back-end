@@ -47,7 +47,7 @@ const read = (req, res) => {
       .populate("tags", "_id name slug")
       .populate("postedBy", "_id name username")
       .select(
-        "_id title slug excrept categories tags postedBy createdAt updatedAt"
+        "_id title slug mdesc categories tags postedBy createdAt updatedAt"
       )
       .sort({ updatedAt: -1 })
       .skip(skip)
