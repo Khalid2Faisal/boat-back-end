@@ -31,6 +31,8 @@ const list = (req, res) => {
 
 const read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+  let limit = req.body.limit ? parseInt(req.body.limit) : 4;
 
   Category.findOne({ slug }).exec((err, category) => {
     if (err || !category) {
@@ -48,6 +50,8 @@ const read = (req, res) => {
         "_id title slug excrept categories tags postedBy createdAt updatedAt"
       )
       .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .exec((err, data) => {
         if (err) {
           return res.status(400).json({
