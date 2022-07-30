@@ -26,11 +26,6 @@ const options = {
   origin: [process.env.CLIENT_URL, process.env.PRODUCTION_URL],
 };
 
-const database =
-  process.env.NODE_ENV === "production"
-    ? process.env.CLOUD_DATABASE
-    : process.env.LOCAL_DATABASE;
-
 // connecting to db
 mongoose
   .connect(database, {
@@ -49,7 +44,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 // cors
 
-app.use(cors(options));
+app.use(cors());
 
 // using routes
 app.use("/api", blogRoutes);
