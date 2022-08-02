@@ -107,7 +107,7 @@ const list = (req, res) => {
   Blog.find({})
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
-    .populate("postedBy", "_id name username")
+    .populate("postedBy", "_id name username about")
     .select(
       "_id title slug excerpt categories tags postedBy createdAt updatedAt"
     )
@@ -133,7 +133,7 @@ const listAllBlogsCategoriesTags = (req, res) => {
   Blog.find({})
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
-    .populate("postedBy", "_id name username")
+    .populate("postedBy", "_id name username about")
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit)
@@ -191,7 +191,7 @@ const listAllFeatured = (req, res) => {
   Blog.find({ isFeatured: true })
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
-    .populate("postedBy", "_id name username")
+    .populate("postedBy", "_id name username about")
     .sort({ updatedAt: -1 })
     .limit(limit)
     .select(
@@ -231,7 +231,7 @@ const read = (req, res) => {
   Blog.findOne({ slug })
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
-    .populate("postedBy", "_id name username")
+    .populate("postedBy", "_id name username about")
     .select(
       "_id title body slug mtitle mdesc categories tags postedBy createdAt updatedAt"
     )
@@ -343,7 +343,7 @@ const listRelated = (req, res) => {
 
   Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
     .limit(limit)
-    .populate("postedBy", "_id name username profile")
+    .populate("postedBy", "_id name username profile about")
     .select("title slug excrept postedBy createdAt updatedAt")
     .exec((err, blogs) => {
       if (err) {
