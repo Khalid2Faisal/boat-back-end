@@ -344,7 +344,7 @@ const listRelated = (req, res) => {
   Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
     .limit(limit)
     .populate("postedBy", "_id name username profile about")
-    .select("title slug excrept postedBy createdAt updatedAt")
+    .select("title slug mdesc postedBy createdAt updatedAt")
     .exec((err, blogs) => {
       if (err) {
         return res.status(400).json({
