@@ -272,6 +272,7 @@ const googleLogin = (req, res) => {
             return res.json({
               token,
               user: { _id, name, email, role, username },
+              message: "Welcome to the Boat Travel!",
             });
           } else {
             let username = shortId.generate();
