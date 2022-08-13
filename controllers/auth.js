@@ -113,7 +113,7 @@ const signin = (req, res) => {
 
 const signout = (req, res) => {
   res.clearCookie("token");
-  res.json({ message: "Signout success" });
+  res.json({ message: "You've successfully logged out." });
 };
 
 const requireSignin = expressJwt({ secret: process.env.JWT_SECRET });
@@ -142,7 +142,7 @@ const adminMiddleware = (req, res, next) => {
 
     if (user.role !== 1) {
       return res.status(400).json({
-        error: "Admin resource. Access denied.",
+        error: "Only admin can do this action.",
       });
     }
 
@@ -294,6 +294,7 @@ const googleLogin = (req, res) => {
               return res.json({
                 token,
                 user: { _id, name, email, role, username },
+                message: "Welcome to the Boat Travel!",
               });
             });
           }
