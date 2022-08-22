@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
+/* Creating a schema for the blog. */
 const blogSchema = new mongoose.Schema(
   {
     title: {
@@ -45,8 +46,10 @@ const blogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/* Creating a model for the blog. */
 const Blog = mongoose.model("Blog", blogSchema);
 
+/* Exporting the Blog model. */
 module.exports = {
   Blog,
 };

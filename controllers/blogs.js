@@ -8,8 +8,14 @@ const stripHtml = require("string-strip-html");
 const _ = require("lodash");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const fs = require("fs");
-const { smartTrim } = require("../helpers/smartTrim");
+const smartTrim = require("../helpers/smartTrim");
 
+/**
+ * It creates a blog post, saves it to the database, and then updates the blog post with the categories
+ * and tags.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const create = (req, res) => {
   const form = new formidable.IncomingForm();
   form.keepExtensions = true;
@@ -103,6 +109,12 @@ const create = (req, res) => {
   });
 };
 
+/**
+ * It finds all the blogs, populates the categories, tags, and postedBy fields, selects the fields to
+ * be returned, and then executes the query.
+ * @param req - The request object.
+ * @param res - response object
+ */
 const list = (req, res) => {
   Blog.find({})
     .populate("categories", "_id name slug")
@@ -122,6 +134,11 @@ const list = (req, res) => {
     });
 };
 
+/**
+ * It fetches all the blogs, categories and tags from the database and sends them to the frontend
+ * @param req - The request object.
+ * @param res - the response object
+ */
 const listAllBlogsCategoriesTags = (req, res) => {
   let limit = req.body.limit ? parseInt(req.body.limit) : 10;
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
@@ -172,6 +189,11 @@ const listAllBlogsCategoriesTags = (req, res) => {
     });
 };
 
+/**
+ * It returns the number of documents in the Blog collection.
+ * @param req - request object
+ * @param res - response object
+ */
 const getBlogSize = (req, res) => {
   Blog.estimatedDocumentCount({}, (err, count) => {
     if (err) {
@@ -184,6 +206,12 @@ const getBlogSize = (req, res) => {
   });
 };
 
+/**
+ * It finds all the blogs that are featured and returns them to the user
+ * @param req - The request object represents the HTTP request and has properties for the request query
+ * string, parameters, body, HTTP headers, and so on.
+ * @param res - response object
+ */
 const listAllFeatured = (req, res) => {
   let limit = 8;
   let blogs;
@@ -209,6 +237,14 @@ const listAllFeatured = (req, res) => {
     });
 };
 
+/**
+ * It finds the user with the isAuthorOfTheMonth property set to true, selects the _id, name, and about
+ * properties, sorts the results by the updatedAt property in descending order, limits the results to
+ * one, and then executes the query.
+ * @param req - The request object represents the HTTP request and has properties for the request query
+ * string, parameters, body, HTTP headers, and so on.
+ * @param res - the response object
+ */
 const authorOfTheMonth = (req, res) => {
   User.find({ isAuthorOfTheMonth: true })
     .select("_id name about")
@@ -226,6 +262,12 @@ const authorOfTheMonth = (req, res) => {
     });
 };
 
+/**
+ * It takes a slug from the URL, finds the blog with that slug, populates the categories, tags, and
+ * postedBy fields, and returns the blog as JSON
+ * @param req - request
+ * @param res - response object
+ */
 const read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOne({ slug })
@@ -246,6 +288,11 @@ const read = (req, res) => {
     });
 };
 
+/**
+ * It finds a blog by its slug and removes it from the database
+ * @param req - request
+ * @param res - The response object.
+ */
 const remove = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOneAndRemove({ slug }).exec((err) => {
@@ -261,6 +308,12 @@ const remove = (req, res) => {
   });
 };
 
+/**
+ * It takes the slug of the blog post, finds the blog post, and then updates the blog post with the new
+ * data
+ * @param req - The request object.
+ * @param res - response object
+ */
 const update = (req, res) => {
   const slug = req.params.slug.toLowerCase();
 
@@ -322,6 +375,11 @@ const update = (req, res) => {
   });
 };
 
+// It takes the slug from the URL, finds the blog with that slug, and then sends the photo data to the
+// client.
+
+// @param req - request
+// @param res - The response object.
 const photo = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOne({ slug })
@@ -337,6 +395,12 @@ const photo = (req, res) => {
     });
 };
 
+/**
+ * It takes the id of the blog post and the categories of the blog post and finds all blog posts that
+ * are not the same as the id of the blog post and have the same categories as the blog post.
+ * @param req - request object
+ * @param res - response object
+ */
 const listRelated = (req, res) => {
   let limit = req.body.limit ? parseInt(req.body.limit) : 3;
   const { _id, categories } = req.body.post;
@@ -356,6 +420,11 @@ const listRelated = (req, res) => {
     });
 };
 
+/**
+ * If the search query is present, then find the blogs that match the search query and return them
+ * @param req - request
+ * @param res - response
+ */
 const listSearch = (req, res) => {
   const { search } = req.query;
   if (search) {
@@ -378,6 +447,12 @@ const listSearch = (req, res) => {
   }
 };
 
+/**
+ * It takes the username from the URL, finds the user in the database, then finds all the blogs that
+ * were posted by that user.
+ * @param req - request
+ * @param res - response
+ */
 const listByUser = (req, res) => {
   let username = req.params.username;
   User.findOne({ username }).exec((err, user) => {
@@ -403,6 +478,12 @@ const listByUser = (req, res) => {
   });
 };
 
+/**
+ * It returns the number of blogs, authors, tags, categories, users, authors of the month and featured
+ * blogs
+ * @param req - The request object.
+ * @param res - response object
+ */
 const statistics = (req, res) => {
   Blog.find({}).exec((err, data) => {
     if (err) {
@@ -474,6 +555,7 @@ const statistics = (req, res) => {
   });
 };
 
+/* Exporting the functions from the blog.controller.js file. */
 module.exports = {
   create,
   list,

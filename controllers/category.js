@@ -3,6 +3,12 @@ const { Blog } = require("../models/blog");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
+/**
+ * It takes the name of the category from the request body, creates a slug from the name, creates a new
+ * category with the name and slug, and then saves the category to the database.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const create = (req, res) => {
   const { name } = req.body;
   let slug = slugify(name).toLowerCase();
@@ -18,6 +24,12 @@ const create = (req, res) => {
   });
 };
 
+/**
+ * It finds all the categories in the database and returns them in a JSON format.
+ * @param req - The request object represents the HTTP request and has properties for the request query
+ * string, parameters, body, HTTP headers, and so on.
+ * @param res - response object
+ */
 const list = (req, res) => {
   Category.find({}).exec((err, data) => {
     if (err || !data) {
@@ -29,6 +41,12 @@ const list = (req, res) => {
   });
 };
 
+/**
+ * It takes a category slug, finds the category, then finds all blogs that have that category, and
+ * returns the category and the blogs.
+ * @param req - The request object.
+ * @param res - response object
+ */
 const read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
@@ -63,6 +81,11 @@ const read = (req, res) => {
   });
 };
 
+/**
+ * It finds a category by its slug and deletes it.
+ * @param req - request
+ * @param res - The response object.
+ */
 const remove = (req, res) => {
   const slug = req.params.slug.toLowerCase();
 
@@ -78,6 +101,7 @@ const remove = (req, res) => {
   });
 };
 
+/* Exporting the functions in the file. */
 module.exports = {
   create,
   list,

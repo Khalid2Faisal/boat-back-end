@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+/* Creating a schema for the category model. */
 const categorySchema = new mongoose.Schema(
   {
     name: {
@@ -17,8 +18,10 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Category = mongoose.model('Category', categorySchema)
+/* Creating a model for the category schema. */
+const Category = mongoose.model("Category", categorySchema);
 
+/* Exporting the Category model. */
 module.exports = {
-  Category
-}
+  Category,
+};

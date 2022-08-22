@@ -9,6 +9,13 @@ const sgMail = require("@sendgrid/mail");
 const { OAuth2Client } = require("google-auth-library");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+/**
+ * It takes the user's name, email, and password from the request body, checks if the email is already
+ * taken, and if it's not, it creates a token, sends an email to the user with the token, and returns a
+ * message to the user.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const preSignup = (req, res) => {
   const { name, email, password } = req.body;
   User.findOne({ email: email.toLowerCase() }, (err, user) => {
@@ -44,6 +51,12 @@ const preSignup = (req, res) => {
   });
 };
 
+/**
+ * It takes a token from the request body, verifies it, and then saves the user to the database.
+ * @param req - The request object.
+ * @param res - response object
+ * @returns The user is being returned.
+ */
 const signup = (req, res) => {
   const token = req.body.token;
   if (token) {
@@ -80,6 +93,13 @@ const signup = (req, res) => {
   }
 };
 
+/**
+ * It takes in the user's email and password, checks if the user exists, if the user exists, it checks
+ * if the password is correct, if the password is correct, it generates a token and sends it to the
+ * client.
+ * @param req - The request object.
+ * @param res - the response object
+ */
 const signin = (req, res) => {
   const { email, password } = req.body;
   // check if the user exists
@@ -111,13 +131,26 @@ const signin = (req, res) => {
   });
 };
 
+/**
+ * It clears the cookie named "token" and sends a JSON response with a message
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const signout = (req, res) => {
   res.clearCookie("token");
   res.json({ message: "You've successfully logged out." });
 };
 
+/* A middleware that checks if the user is logged in. */
 const requireSignin = expressJwt({ secret: process.env.JWT_SECRET });
 
+/**
+ * It takes the user id from the request object, finds the user in the database, and then adds the user
+ * to the request object.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - This is a callback function that is called when the middleware is complete.
+ */
 const authMiddleware = (req, res, next) => {
   const authUserId = req.user._id;
   User.findById({ _id: authUserId }).exec((err, user) => {
@@ -131,6 +164,12 @@ const authMiddleware = (req, res, next) => {
   });
 };
 
+/**
+ * If the user is not an admin, then return an error message.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - This is a callback function that will be called when the middleware is complete.
+ */
 const adminMiddleware = (req, res, next) => {
   const adminUserId = req.user._id;
   User.findById({ _id: adminUserId }).exec((err, user) => {
@@ -151,6 +190,12 @@ const adminMiddleware = (req, res, next) => {
   });
 };
 
+/**
+ * It checks if the user is authorized to update or delete a blog post.
+ * @param req - The request object.
+ * @param res - response object
+ * @param next - This is a callback function that is called when the middleware is complete.
+ */
 const canUpdateDeleteBlog = (req, res, next) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOne({ slug }).exec((err, data) => {
@@ -170,6 +215,12 @@ const canUpdateDeleteBlog = (req, res, next) => {
   });
 };
 
+/**
+ * It takes the email from the request body, finds the user with that email, creates a token, sends an
+ * email with a link to reset the password, and updates the user's resetPasswordLink with the token.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const forgotPassword = (req, res) => {
   const { email } = req.body;
 
@@ -213,6 +264,14 @@ const forgotPassword = (req, res) => {
   });
 };
 
+/**
+ * It takes the resetPasswordLink and newPassword from the request body, verifies the
+ * resetPasswordLink, finds the user with the resetPasswordLink, updates the user's password and
+ * resetPasswordLink, and sends a response to the client.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @returns The user is being returned.
+ */
 const resetPassword = (req, res) => {
   const { resetPasswordLink, newPassword } = req.body;
 
@@ -254,6 +313,9 @@ const resetPassword = (req, res) => {
   }
 };
 
+/* The below code is using the Google OAuth2Client to verify the idToken that is sent from the
+frontend. If the idToken is verified, the user is then checked to see if they exist in the database.
+If they do, they are logged in. If they don't, they are created and logged in. */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const googleLogin = (req, res) => {
   const idToken = req.body.tokenId;
@@ -272,7 +334,7 @@ const googleLogin = (req, res) => {
             return res.json({
               token,
               user: { _id, name, email, role, username },
-              message: "Welcome to the Boat Travel!",
+              message: "Welcome to Boat Travel!",
             });
           } else {
             let username = shortId.generate();
@@ -295,7 +357,7 @@ const googleLogin = (req, res) => {
               return res.json({
                 token,
                 user: { _id, name, email, role, username },
-                message: "Welcome to the Boat Travel!",
+                message: "Welcome to Boat Travel!",
               });
             });
           }
@@ -308,6 +370,7 @@ const googleLogin = (req, res) => {
     });
 };
 
+/* Exporting all the functions from the auth.js file. */
 module.exports = {
   preSignup,
   signup,

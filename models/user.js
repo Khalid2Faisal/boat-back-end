@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 
+/* Creating a schema for the user model. */
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -55,6 +56,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/* Creating a virtual field called password. */
 userSchema
   .virtual("password")
   .set(function (password) {
@@ -69,10 +71,13 @@ userSchema
     return this._password;
   });
 
+/* Creating methods for the user model. */
 userSchema.methods = {
+  /* Comparing the plain text password with the hashed password. */
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
   },
+  /* Encrypting the password. */
   encryptPassword: function (password) {
     if (!password) return "";
     try {
@@ -84,13 +89,16 @@ userSchema.methods = {
       return "";
     }
   },
+  /* Generating a random number. */
   makeSalt: function () {
-    return Math.round(new Date().valueOf() * Math.random()) + '';
+    return Math.round(new Date().valueOf() * Math.random()) + "";
   },
 };
 
+/* Creating a model called User. */
 const User = mongoose.model("User", userSchema);
 
+/* Exporting the User model. */
 module.exports = {
   User,
 };

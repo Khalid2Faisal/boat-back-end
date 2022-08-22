@@ -1,8 +1,13 @@
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+/**
+ * It takes the data from the form, and sends it to the email address specified in the .env file.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const contact = (req, res) => {
-  const { name, email, message } = req.body
+  const { name, email, message } = req.body;
 
   const emailData = {
     to: process.env.EMAIL_TO,
@@ -17,19 +22,25 @@ const contact = (req, res) => {
       <hr />
       <p>This email may contain sensetive information</p>
       <p>https://devtodev.com</p>
-    `
-  }
+    `,
+  };
   sgMail.send(emailData).then((sent) => {
     return res.json({
-      success: true
-    })
-  })
-}
+      success: true,
+    });
+  });
+};
 
+/**
+ * It takes the author's email, the name, email, and message from the user, and sends an email to the
+ * author and the admin
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const contactBlogAuthor = (req, res) => {
-  const { authorEmail, name, email, message } = req.body
+  const { authorEmail, name, email, message } = req.body;
 
-  let maillist = [authorEmail, process.env.EMAIL_TO]
+  let maillist = [authorEmail, process.env.EMAIL_TO];
 
   const emailData = {
     to: maillist,
@@ -44,16 +55,17 @@ const contactBlogAuthor = (req, res) => {
       <hr />
       <p>This email may contain sensetive information</p>
       <p>https://devtodev.com</p>
-    `
-  }
+    `,
+  };
   sgMail.send(emailData).then((sent) => {
     return res.json({
-      success: true
-    })
-  })
-}
+      success: true,
+    });
+  });
+};
 
+/* Exporting the functions contact and contactBlogAuthor. */
 module.exports = {
   contact,
-  contactBlogAuthor
-}
+  contactBlogAuthor,
+};

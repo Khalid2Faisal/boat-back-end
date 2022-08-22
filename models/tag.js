@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+/* Creating a schema for the Tag model. */
 const tagSchema = new mongoose.Schema(
   {
     name: {
@@ -17,8 +18,10 @@ const tagSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Tag = mongoose.model('Tag', tagSchema)
+/* Creating a model for the Tag schema. */
+const Tag = mongoose.model("Tag", tagSchema);
 
+/* Exporting the Tag model. */
 module.exports = {
-  Tag
-}
+  Tag,
+};
