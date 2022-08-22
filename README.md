@@ -2,7 +2,7 @@
 
 ![](https://res.cloudinary.com/khalid-faisal/image/upload/v1661171582/Personal/boat-home-page_l8ygre.png)
 
-You can preview this site [here](https://boat-travel.vercel.app/). Back-End code [here](https://github.com/Khalid2Faisal/boat-back-end).
+You can preview this site [here](https://boat-travel.vercel.app/). Front-End code [here](https://github.com/Khalid2Faisal/Boat-FrontEnd).
 
 ## Technical implementation details
 
